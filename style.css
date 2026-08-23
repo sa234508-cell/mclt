@@ -1,0 +1,959 @@
+@font-face {
+    font-family: 'HYQiHei';
+    src: url('HYQiHei.ttf') format('truetype');
+}
+
+:root {
+    --bg-base: black;
+    --text-main: white;
+    --text-muted: rgba(255, 255, 255, 0.6);
+    --accent: white;
+    --glass-bg: rgba(25, 25, 35, 0.4);
+    --glass-border: rgba(255, 255, 255, 0.08);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'HYQiHei', sans-serif;
+    background-color: var(--bg-base);
+    color: var(--text-main);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: -40px;
+    background-image: url('https://static.wikia.nocookie.net/projectsekai/images/b/b5/Straightforward_Lyrics_T.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: blur(30px) brightness(0.3);
+    z-index: -1;
+    pointer-events: none;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-base);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+header {
+    padding: 40px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+}
+
+.logo {
+    font-family: 'HYQiHei', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: white;
+}
+
+.logo i {
+    color: var(--accent);
+}
+
+.header-actions a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.header-actions a:hover {
+    color: white;
+}
+
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.3s;
+    margin-right: 20px;
+}
+
+.tooltip-container:hover {
+    color: white;
+}
+
+.tooltip-popup {
+    display: none;
+    position: absolute;
+    top: 150%;
+    right: 0;
+    width: 400px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 12px;
+    padding: 16px;
+    color: white;
+    z-index: 100;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    text-align: left;
+    font-weight: normal;
+    line-height: 1.5;
+    cursor: default;
+}
+
+.tooltip-popup.active {
+    display: block;
+}
+
+.tooltip-popup h4 {
+    margin-bottom: 8px;
+    font-size: 15px;
+    color: var(--accent);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tooltip-popup .close-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.tooltip-popup .close-btn:hover {
+    color: white;
+}
+
+main {
+    padding: 0 60px 100px;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+footer {
+    text-align: center;
+    margin-top: 60px;
+    padding: 32px 0;
+    border-top: 1px solid var(--glass-border);
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    opacity: 50%;
+}
+
+.footer-credits {
+    color: red;
+    text-shadow: 0 0 10px red,
+        0 0 20px red,
+        0 0 30px red;
+}
+
+.chapter-title {
+    font-family: 'HYQiHei', sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, white, #888);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.chapter-subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 40px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.track-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 32px;
+    margin-bottom: 80px;
+}
+
+.track-card {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+}
+
+.track-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.track-cover-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+}
+
+.track-cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.track-card:hover .track-cover {
+    transform: scale(1.05);
+}
+
+.play-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.track-card:hover .play-overlay {
+    opacity: 1;
+}
+
+.play-overlay i {
+    font-size: 48px;
+    color: rgba(255, 255, 255, 0.9);
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+    transform: scale(0.8);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.track-card:hover .play-overlay i {
+    transform: scale(1);
+}
+
+.track-info {
+    padding: 20px;
+}
+
+.track-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.track-artist {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+}
+
+.track-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-muted);
+    border-top: 1px solid var(--glass-border);
+    padding-top: 12px;
+}
+
+.track-meta-left {
+    flex: 1;
+    min-width: 0;
+    margin-right: 12px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.track-date {
+    flex-shrink: 0;
+}
+
+.badge {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    display: inline-flex;
+    max-width: 100%;
+    align-items: center;
+}
+
+.badge-text {
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.locked-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 32px;
+    margin-bottom: 80px;
+    opacity: 0.5;
+}
+
+.locked-card {
+    background: transparent;
+    border: 2px dashed var(--glass-border);
+    border-radius: 16px;
+    aspect-ratio: 16 / 9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+}
+
+.locked-card i {
+    font-size: 32px;
+    margin-bottom: 12px;
+}
+
+.now-playing-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(100%);
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    overflow: hidden;
+}
+
+.now-playing-overlay.active {
+    transform: translateY(0);
+}
+
+.np-background {
+    position: absolute;
+    inset: -50px;
+    background-size: cover;
+    background-position: center;
+    filter: blur(60px) brightness(0.4);
+    z-index: 0;
+    transition: background-image 1s ease;
+}
+
+.np-header {
+    position: relative;
+    z-index: 10;
+    padding: 30px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-close {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 20px;
+    backdrop-filter: blur(10px);
+    transition: all 0.2s;
+}
+
+.btn-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+.np-content {
+    position: relative;
+    z-index: 10;
+    flex: 1;
+    display: flex;
+    padding: 0 60px 40px;
+    gap: 60px;
+    align-items: stretch;
+    max-width: 1800px;
+    margin: 0 auto;
+    width: 100%;
+    min-height: 0;
+}
+
+.np-left {
+    flex: 1.2;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    min-height: 0;
+    min-width: 0;
+}
+
+.video-container {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+    background: black;
+    position: relative;
+}
+
+.video-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.np-track-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 20px;
+}
+
+.np-track-details>div:first-child {
+    flex: 1;
+    min-width: 0;
+}
+
+.np-title {
+    font-size: 36px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.np-artist {
+    font-size: 20px;
+    color: var(--text-muted);
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.marquee-text {
+    display: inline-block;
+}
+
+.marquee-content {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.marquee .marquee-content {
+    animation: np-marquee-left var(--marquee-duration, 8s) linear infinite;
+}
+
+.marquee {
+    -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+    text-overflow: clip !important;
+}
+
+@keyframes np-marquee-left {
+
+    0%,
+    15% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(var(--marquee-distance));
+    }
+}
+
+.np-options-wrapper {
+    position: relative;
+}
+
+.btn-options {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 20px;
+    backdrop-filter: blur(10px);
+    transition: all 0.2s;
+}
+
+.btn-options:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+.np-options-menu {
+    position: absolute;
+    bottom: 60px;
+    right: 0;
+    width: 280px;
+    background: rgba(25, 25, 35, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px);
+    transition: all 0.2s;
+    z-index: 100;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.np-options-menu.active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.menu-track-title {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.menu-track-artist {
+    font-size: 13px;
+    color: var(--accent);
+    margin-bottom: 8px;
+}
+
+.menu-info-item {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.menu-ig-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: white;
+    text-decoration: none;
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, red 50%, #cc2366 75%, #bc1888 100%);
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 13px;
+    margin-top: 10px;
+    transition: opacity 0.2s;
+}
+
+.menu-ig-link:hover {
+    opacity: 0.9;
+}
+
+.np-right {
+    flex: 0.8;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 24px;
+    overflow: hidden;
+    min-height: 0;
+}
+
+.np-right::before,
+.np-right::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 100px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.np-right::before {
+    top: 0;
+    background: linear-gradient(to bottom, var(--bg-base) 0%, transparent 100%);
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, transparent 100%);
+}
+
+.np-right::after {
+    bottom: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+}
+
+.lyrics-container {
+    flex: 1;
+    position: relative;
+    overflow-y: auto;
+    padding: 40px 30px;
+    scroll-behavior: smooth;
+}
+
+.lyrics-container::-webkit-scrollbar {
+    display: none;
+}
+
+.lyric-line {
+    font-size: 20px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.3);
+    margin-bottom: 20px;
+    transition: color 0.3s, transform 0.3s;
+    cursor: pointer;
+    word-break: break-word;
+    white-space: pre-wrap;
+    line-height: 1.5;
+}
+
+.lyric-line:hover {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.lyric-line.active {
+    color: white;
+    transform: scale(1.05);
+    transform-origin: left center;
+}
+
+.np-bottom {
+    position: relative;
+    z-index: 10;
+    padding: 0 60px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.progress-container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-variant-numeric: tabular-nums;
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+.progress-bar-bg {
+    flex: 1;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    background: white;
+    border-radius: 3px;
+    pointer-events: none;
+}
+
+.controls-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.visualizer {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 40px;
+    width: 100px;
+}
+
+.bar {
+    flex: 1;
+    background: var(--accent);
+    border-radius: 2px 2px 0 0;
+    height: 10%;
+    transition: height 0.5s ease-out;
+}
+
+.visualizer.playing .bar {
+    animation: bounce 0.5s infinite alternate ease-in;
+}
+
+.visualizer.playing .bar:nth-child(1) {
+    animation-delay: 0.1s;
+    animation-duration: 0.4s;
+}
+
+.visualizer.playing .bar:nth-child(2) {
+    animation-delay: 0.3s;
+    animation-duration: 0.6s;
+}
+
+.visualizer.playing .bar:nth-child(3) {
+    animation-delay: 0.0s;
+    animation-duration: 0.5s;
+}
+
+.visualizer.playing .bar:nth-child(4) {
+    animation-delay: 0.2s;
+    animation-duration: 0.7s;
+}
+
+.visualizer.playing .bar:nth-child(5) {
+    animation-delay: 0.4s;
+    animation-duration: 0.4s;
+}
+
+.visualizer.playing .bar:nth-child(6) {
+    animation-delay: 0.1s;
+    animation-duration: 0.4s;
+}
+
+.visualizer.playing .bar:nth-child(7) {
+    animation-delay: 0.3s;
+    animation-duration: 0.6s;
+}
+
+.visualizer.playing .bar:nth-child(8) {
+    animation-delay: 0.0s;
+    animation-duration: 0.5s;
+}
+
+.visualizer.playing .bar:nth-child(9) {
+    animation-delay: 0.3s;
+    animation-duration: 0.6s;
+}
+
+.visualizer.playing .bar:nth-child(10) {
+    animation-delay: 0.0s;
+    animation-duration: 0.5s;
+}
+
+@keyframes bounce {
+    0% {
+        height: 10%;
+    }
+
+    100% {
+        height: 100%;
+    }
+}
+
+.player-controls {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.ctrl-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 24px;
+    cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
+}
+
+.ctrl-btn:hover {
+    color: white;
+    transform: scale(1.1);
+}
+
+.btn-play-pause {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: white;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    padding-left: 4px;
+}
+
+.btn-play-pause.is-playing {
+    padding-left: 0;
+}
+
+.btn-play-pause:hover {
+    transform: scale(1.05);
+    background: #f0f0f0;
+}
+
+.np-toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: rgba(25, 25, 35, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    z-index: 9000;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    max-width: 375px;
+    transform: translateY(150%);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.np-toast.active {
+    transform: translateY(0);
+}
+
+.np-toast:hover {
+    background: rgba(40, 40, 55, 0.9);
+}
+
+.np-toast-cover {
+    width: 48px;
+    height: 48px;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+.np-toast-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    min-width: 0;
+}
+
+.np-toast-title {
+    font-size: 14px;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.np-toast-artist {
+    font-size: 12px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.np-toast-icon {
+    font-size: 24px;
+    color: var(--accent);
+    margin-left: 10px;
+}
+
+.np-toast-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-left: auto;
+}
+
+.toast-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 18px;
+    cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.toast-btn:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.1);
+}
+
+@media (max-width: 1024px) {
+    .np-content {
+        flex-direction: column;
+        padding: 0 30px;
+        gap: 30px;
+    }
+
+    .np-right {
+        width: 100%;
+        height: 30vh;
+    }
+
+    .np-bottom {
+        padding: 0 30px 40px;
+    }
+
+    header,
+    main {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+}
+
+/* Mobile only: move the lyrics panel upward away from the progress bar. */
+@media (max-width: 600px) {
+    .np-content {
+        gap: 16px;
+        padding-bottom: 20px;
+    }
+
+    .np-right {
+        transform: translateY(-18px);
+    }
+}
+
+.controls-spacer {
+    width: 100px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
